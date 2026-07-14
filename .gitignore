@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+dist
+.env.local
+.env*.local
+.vercel
+.DS_Store
+*.log
+
+# 54MB single-file HTML reference page is too big for git — keep locally in raw/
+raw/*.html

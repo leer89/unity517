@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unity n Music 517</title>
+<style>
+:root{
+  --ink:rgb(8 8 14);
+  --paper:rgb(245 245 250);
+  --muted:rgb(140 140 160);
+  --card:rgb(18 18 28);
+  --line:rgb(38 38 54);
+  --neon:rgb(255 26 117);
+  --cyan:rgb(34 211 238);
+  --violet:rgb(167 85 255);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(60% 50% at 80% 0%, rgb(255 26 117 / .10) 0%, transparent 60%),
+    radial-gradient(70% 50% at 0% 100%, rgb(34 211 238 / .08) 0%, transparent 60%),
+    radial-gradient(50% 30% at 50% 50%, rgb(167 85 255 / .05) 0%, transparent 60%);}
+.display{font-family:"Impact","Arial Black",system-ui,sans-serif;font-weight:900;letter-spacing:.02em;text-transform:uppercase;line-height:.9}
+.neon-pink{text-shadow:0 0 12px rgb(255 26 117 / .8),0 0 32px rgb(255 26 117 / .4)}
+.neon-cyan{text-shadow:0 0 12px rgb(34 211 238 / .8),0 0 32px rgb(34 211 238 / .4)}
+
+/* Container: capped width + horizontal gutters. Children MUST NOT use the
+   `padding` shorthand on top of this — that wipes the gutters. Use padding-top
+   / padding-bottom or vertical-only shorthand like `padding-block`. */
+.container{max-width:1280px;margin:0 auto;padding-left:20px;padding-right:20px}
+@media(min-width:640px){.container{padding-left:24px;padding-right:24px}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:-1;background-image:url("raw/unity fest.png");background-size:cover;background-position:center;opacity:.4}
+.hero-fade{position:absolute;inset:0;z-index:-1;background:linear-gradient(to bottom, rgb(8 8 14 / .4), rgb(8 8 14 / .7), rgb(8 8 14))}
+.hero-inner{padding-top:64px;padding-bottom:80px}
+@media(min-width:640px){.hero-inner{padding-top:96px;padding-bottom:112px}}
+.eyebrow{display:inline-block;padding:6px 12px;border:1px solid rgb(255 26 117 / .6);border-radius:999px;color:var(--neon);font-size:11px;letter-spacing:.2em;text-transform:uppercase;box-shadow:0 0 24px rgb(255 26 117 / .55), 0 0 60px rgb(255 26 117 / .25);margin-bottom:24px}
+.headline{font-size:clamp(40px, 9vw, 128px);max-width:900px;margin:0 0 16px}
+.subhead{font-size:16px;color:rgb(245 245 250 / .9);max-width:600px;margin:0 0 28px}
+@media(min-width:640px){.subhead{font-size:18px}}
+.btn{display:inline-block;padding:12px 24px;background:var(--neon);color:var(--ink);font-weight:600;text-transform:uppercase;letter-spacing:.15em;font-size:13px;border-radius:999px;text-decoration:none;box-shadow:0 0 24px rgb(255 26 117 / .55), 0 0 60px rgb(255 26 117 / .25)}
+.btn:hover{transform:translateY(-1px)}
+
+/* SECTIONS — vertical padding only; horizontal comes from .container */
+section.block{padding-top:40px;padding-bottom:40px}
+@media(min-width:640px){section.block{padding-top:56px;padding-bottom:56px}}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:12px}
+.section-title{font-size:clamp(22px,3vw,36px);margin:0}
+.section-meta{color:var(--muted);font-size:11px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+
+/* FEATURED */
+.featured{display:grid;grid-template-columns:1fr;border:1px solid var(--line);background:var(--card);border-radius:20px;overflow:hidden;text-decoration:none;color:inherit}
+@media(min-width:768px){.featured{grid-template-columns:1fr 1fr}}
+.featured-img{position:relative;aspect-ratio:4/5}
+@media(min-width:768px){.featured-img{aspect-ratio:auto;min-height:420px}}
+.featured-img img{width:100%;height:100%;object-fit:cover;display:block}
+.featured-body{padding:24px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+@media(min-width:640px){.featured-body{padding:36px}}
+.featured-eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--neon)}
+.featured-title{font-size:clamp(28px,4vw,48px);margin:0}
+.featured-loc{color:var(--muted);margin:0;font-size:14px}
+.featured-desc{color:rgb(245 245 250 / .85);margin:0;font-size:15px;line-height:1.5}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr);gap:16px}}
+@media(min-width:768px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1024px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1280px){.grid{grid-template-columns:repeat(6,1fr)}}
+@media(min-width:1536px){.grid{grid-template-columns:repeat(9,1fr)}}
+.card{display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;transition:border-color .15s, transform .15s}
+.card:hover{border-color:rgb(255 26 117 / .6)}
+.card-img{position:relative;aspect-ratio:3/4;background:var(--ink);overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.card:hover .card-img img{transform:scale(1.05)}
+.card-img.empty{background:linear-gradient(135deg, rgb(167 85 255 / .3), rgb(34 211 238 / .2))}
+.featured-badge{position:absolute;top:8px;left:8px;background:var(--neon);color:var(--ink);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;padding:2px 8px;border-radius:999px;z-index:1}
+.card-body{padding:12px}
+.card-date{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:4px}
+.card-title{font-size:17px;line-height:1.1;margin:0 0 4px}
+.card-loc{font-size:12px;color:var(--muted);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);margin-top:48px;background:rgb(8 8 14 / .6);backdrop-filter:blur(8px)}
+.footer-inner{padding-top:28px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--muted)}
+@media(min-width:640px){.footer-inner{flex-direction:row;align-items:center;justify-content:space-between}}
+.footer-inner a{color:var(--muted);text-decoration:none;margin-right:16px}
+@media(min-width:640px){.footer-inner a{margin-right:0;margin-left:16px}}
+.footer-inner a:hover{color:var(--paper)}
+
+/* Mobile-safe form fields baseline (in case forms get added later). */
+input,textarea,select{max-width:100%;box-sizing:border-box}
+textarea{resize:vertical;min-height:6rem}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-fade"></div>
+  <div class="container hero-inner">
+    <span class="eyebrow">Featured · Now</span>
+    <h1 class="display headline neon-pink">Unity in Music<br>Festival</h1>
+    <p class="subhead">Aug 30 · Old Town Lansing · All Ages · Free Entry</p>
+    <a href="#events" class="btn">See the lineup →</a>
+  </div>
+</header>
+
+<section class="block container">
+  <div class="section-head">
+    <h2 class="display section-title neon-cyan">Headlining</h2>
+    <span class="section-meta">The big one</span>
+  </div>
+  <a href="#" class="featured">
+    <div class="featured-img"><img src="raw/unity fest.png" alt="Unity in Music Festival"></div>
+    <div class="featured-body">
+      <span class="featured-eyebrow">Aug 30 · 11am–10pm</span>
+      <h3 class="display featured-title">Unity in Music Festival</h3>
+      <p class="featured-loc">📍 216 E Grand River Ave, Old Town Lansing, MI</p>
+      <p class="featured-desc">All ages, free entry. Multiple stages, DJs, electronic music artists, vendors, food trucks, non-profits. The big one.</p>
+      <span style="color:var(--cyan)">Details →</span>
+    </div>
+  </a>
+</section>
+
+<section id="events" class="block container">
+  <div class="section-head">
+    <h2 class="display section-title">Upcoming</h2>
+    <span class="section-meta">3 shows</span>
+  </div>
+  <div class="grid">
+    <a href="#" class="card">
+      <div class="card-img"><span class="featured-badge">★ Featured</span><img src="raw/unity fest.png" alt=""></div>
+      <div class="card-body">
+        <div class="card-date">Aug 30</div>
+        <div class="display card-title">Unity in Music Festival</div>
+        <div class="card-loc">Old Town Lansing</div>
+      </div>
+    </a>
+    <a href="#" class="card">
+      <div class="card-img"><img src="raw/unity in music.png" alt=""></div>
+      <div class="card-body">
+        <div class="card-date">Jun 20</div>
+        <div class="display card-title">Unity in Music — The Avenue</div>
+        <div class="card-loc">The Avenue Cafe, Lansing</div>
+      </div>
+    </a>
+    <a href="#" class="card">
+      <div class="card-img empty"></div>
+      <div class="card-body">
+        <div class="card-date">Jul 11</div>
+        <div class="display card-title">Late Night Sessions</div>
+        <div class="card-loc">Old Town Lansing</div>
+      </div>
+    </a>
+    <a href="#" class="card">
+      <div class="card-img empty"></div>
+      <div class="card-body">
+        <div class="card-date">Jul 25</div>
+        <div class="display card-title">Vendor Pop-Up + Music</div>
+        <div class="card-loc">Lansing, MI</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div><span class="display" style="color:var(--paper);letter-spacing:.15em">UNITY N MUSIC 517</span> · Lansing, MI</div>
+    <div>
+      <a href="#">About</a>
+      <a href="https://www.instagram.com/unitynmusic517/" target="_blank">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

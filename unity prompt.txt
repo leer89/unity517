@@ -1,0 +1,23 @@
+in the folder that i gave you there is a raw folder, use that for examples, 
+
+for example I would like to make an underground looking edm event website that follows what intersection already has
+
+ive included the singlefile for intersection, but if you need more here is the link to their website - https://sectionlive.com/
+
+the site should be MOBILE prioritized meaning we might have 9 checked  width across the browser on desktop but lets say we have new events, the newest event needs to go up top, in this case, it is the unity fest file in the raw folders
+
+
+
+the site needs authentication but secretly so one user type, the admin can go in and add new events or change a banner graphic
+
+
+
+the unity site for creative reference and fonts is who i am making a site for, their reference link i s https://www.instagram.com/unitynmusic517/
+
+
+
+their big event i need to showcase is this - https://www.instagram.com/unitynmusic517/p/DX0S6fIjYat/
+
+
+
+i have a domain i own - makotechs.com to showcase but do you think we need supbase and vercel instead since we require authentication for one type of admin user role?
