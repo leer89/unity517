@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Event } from "@/lib/types";
 import { formatEventDate } from "@/lib/format";
+import { LABEL_URL, SPOTIFY_URL } from "@/lib/links";
 
 type Props = {
   event: Event;
@@ -51,6 +52,30 @@ export default function FeaturedEvent({ event }: Props) {
           </div>
         </div>
       </Link>
+
+      {/* Label + Spotify sit here, tied to the festival itself, rather than
+          buried only in the footer - this is the highest-attention real
+          estate on the page while the festival is the featured event.
+          Kept as a sibling row (not nested inside the card's own link) so
+          we don't put an <a> inside an <a>. */}
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <a
+          href={LABEL_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-full border border-brand-line px-3 py-1.5 text-xs uppercase tracking-widest text-brand-paper/90 hover:border-brand-cyan/60 hover:text-brand-cyan transition"
+        >
+          Unity In Music Records ↗
+        </a>
+        <a
+          href={SPOTIFY_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-full border border-brand-line px-3 py-1.5 text-xs uppercase tracking-widest text-brand-paper/90 hover:border-brand-neon/60 hover:text-brand-neon transition"
+        >
+          Listen on Spotify ↗
+        </a>
+      </div>
     </section>
   );
 }

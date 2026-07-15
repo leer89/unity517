@@ -9,13 +9,23 @@ const USE_MOCKS = !URL || URL.includes("YOUR-PROJECT-REF") || URL.includes("stub
 
 const TS = "2026-05-01T00:00:00.000Z";
 
+const FESTIVAL_LINEUP = [
+  "John Beltran", "Raedy Lex", "Zak Bletz", "Beatloaf", "Mike Ransom",
+  "Ganja Girl", "Ryan Sadorus", "Juan Trevino", "The DJ Bob Marino", "Beach House",
+  "Dan Laino", "DJ DAV", "Bass Owl", "K-LALA", "VNM$",
+  "Social Circle", "Prophet ECKS", "Damselfly", "Kiwii", "One",
+  "YFPxDogmatik", "Kindly", "ABC Collective", "Chancellor", "Magictraxx",
+  "Jay Arthur", "Rob Powell", "Disc Dolo", "Jason Patino", "DJ Batz",
+  "The Don", "Mr Twista", "Katalist", "Brent Scudder",
+].join("\n");
+
 const MOCK_EVENTS: Event[] = [
   {
     id: "1", title: "Unity in Music Festival", slug: "unity-fest-2026",
     starts_at: "2026-08-30T15:00:00.000Z", ends_at: "2026-08-31T02:00:00.000Z",
     location: "216 E Grand River Ave, Old Town Lansing, MI",
     description: "All ages, free entry. Multiple stages, DJs, electronic music artists, vendors, food trucks, non-profits.",
-    flyer_url: "/unity-fest.png", ticket_url: null,
+    flyer_url: "/unity-fest.png", ticket_url: null, lineup: FESTIVAL_LINEUP,
     is_featured: true, is_archived: false, sort_order: 1, created_at: TS, updated_at: TS,
   },
   {
@@ -23,14 +33,14 @@ const MOCK_EVENTS: Event[] = [
     starts_at: "2026-06-21T01:00:00.000Z", ends_at: "2026-06-21T06:00:00.000Z",
     location: "The Avenue Cafe, Lansing, MI",
     description: "Evolve Studios x GG present a night of underground electronic music.",
-    flyer_url: "/unity-in-music.png", ticket_url: null,
+    flyer_url: "/unity-in-music.png", ticket_url: null, lineup: null,
     is_featured: false, is_archived: false, sort_order: 2, created_at: TS, updated_at: TS,
   },
   {
     id: "3", title: "Late Night Sessions", slug: "late-night-sessions",
     starts_at: "2026-07-12T02:00:00.000Z", ends_at: null,
     location: "Old Town Lansing, MI", description: "Local DJs till close.",
-    flyer_url: null, ticket_url: null,
+    flyer_url: null, ticket_url: null, lineup: null,
     is_featured: false, is_archived: false, sort_order: 3, created_at: TS, updated_at: TS,
   },
 ];

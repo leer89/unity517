@@ -25,3 +25,16 @@ export function formatEventDate(startsAt: string, endsAt: string | null): string
   const endTime = new Intl.DateTimeFormat("en-US", timeFmt).format(end).toLowerCase().replace(" ", "");
   return `${datePart} · ${startTime}–${endTime}`;
 }
+
+/**
+ * Whole days remaining until an ISO timestamp, clamped at 0. Used for the
+ * homepage festival countdown - the hero's "thesis" moment while the fest is
+ * still months out but the site is already live for weekly flyers.
+ */
+export function daysUntil(iso: string): number {
+  const now = new Date();
+  const target = new Date(iso);
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const diff = Math.ceil((target.getTime() - now.getTime()) / msPerDay);
+  return Math.max(diff, 0);
+}

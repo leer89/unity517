@@ -64,6 +64,14 @@ export default function EventForm({ action, event }: Props) {
         placeholder="https://..."
       />
 
+      <Textarea
+        label="Lineup (optional - one artist per line, any order, we alphabetize it)"
+        name="lineup"
+        rows={8}
+        defaultValue={event?.lineup ?? ""}
+        placeholder={"John Beltran\nRaedy Lex\nZak Bletz\n..."}
+      />
+
       <div className="w-full">
         <Label>Flyer image</Label>
         <p className="text-xs text-brand-muted mt-1">Upload an image, or paste a URL below.</p>

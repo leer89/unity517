@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventBySlug } from "@/lib/queries";
 import { formatEventDate } from "@/lib/format";
+import LineupList from "@/components/LineupList";
 
 export const dynamic = "force-dynamic";
 
@@ -123,6 +124,8 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
           )}
         </div>
       </div>
+
+      {event.lineup && <LineupList lineup={event.lineup} />}
     </main>
   );
 }

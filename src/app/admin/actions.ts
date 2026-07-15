@@ -134,6 +134,7 @@ export async function createEvent(formData: FormData) {
       description: optStr(formData, "description"),
       flyer_url,
       ticket_url: optStr(formData, "ticket_url"),
+      lineup: optStr(formData, "lineup"),
       is_featured,
       is_archived: false,
       sort_order,
@@ -183,6 +184,7 @@ export async function updateEvent(id: string, formData: FormData) {
       description: optStr(formData, "description"),
       flyer_url,
       ticket_url: optStr(formData, "ticket_url"),
+      lineup: optStr(formData, "lineup"),
       is_featured,
       is_archived,
     })
