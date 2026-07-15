@@ -27,6 +27,14 @@ function optStr(formData: FormData, key: string): string | null {
   return v.length ? v : null;
 }
 
+// Combines separate date + time inputs (see EventForm.tsx) back into the
+// "YYYY-MM-DDTHH:mm" shape Date() expects. Missing time defaults to
+// midnight - a date without a time is still a valid, if vague, event start.
+function combineDateTime(dateStr: string, timeStr: string): string | null {
+  if (!dateStr) return null;
+  return `${dateStr}T${timeStr || "00:00"}`;
+}
+
 // Turns "unity-fest_aug30.jpg" into "Unity Fest Aug30" - used as a fallback
 // title when the admin uploads just a flyer without typing one in.
 function titleFromFilename(filename: string): string {
@@ -148,9 +156,9 @@ export async function createEvent(formData: FormData) {
   if (!title) throw new Error("Title is required (or upload a flyer to derive one from its filename)");
 
   const slug = slugify(str(formData, "slug") || title);
-  const starts_at = str(formData, "starts_at");
-  if (!starts_at) throw new Error("Start date/time is required");
-  const ends_at = optStr(formData, "ends_at");
+  const starts_at = combineDateTime(str(formData, "starts_date"), str(formData, "starts_time"));
+  if (!starts_at) throw new Error("Start date is required");
+  const ends_at = combineDateTime(str(formData, "ends_date"), str(formData, "ends_time"));
   const is_featured = formData.get("is_featured") === "on";
 
   const flyer_url = await resolveImageUrl(supabase, formData, "flyer_file", "flyer_url", null, "flyers");
@@ -197,9 +205,9 @@ export async function updateEvent(id: string, formData: FormData) {
   if (!title) throw new Error("Title is required");
 
   const slug = slugify(str(formData, "slug") || title);
-  const starts_at = str(formData, "starts_at");
-  if (!starts_at) throw new Error("Start date/time is required");
-  const ends_at = optStr(formData, "ends_at");
+  const starts_at = combineDateTime(str(formData, "starts_date"), str(formData, "starts_time"));
+  if (!starts_at) throw new Error("Start date is required");
+  const ends_at = combineDateTime(str(formData, "ends_date"), str(formData, "ends_time"));
   const is_featured = formData.get("is_featured") === "on";
   const is_archived = formData.get("is_archived") === "on";
 

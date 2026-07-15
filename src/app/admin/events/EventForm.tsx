@@ -7,18 +7,30 @@ type Props = {
   event?: Event;
 };
 
-// Pre-fills the datetime-local input from an ISO timestamp. Uses local time
-// (Eastern for Lansing), so the admin sees the value they entered.
-function toDatetimeLocal(iso: string | null): string {
+// Matches the shared input styling in components/ui/FormField.tsx (that file
+// doesn't export its base class, so this is a deliberate small duplicate).
+const dateTimeInputClass =
+  "block w-full min-w-0 rounded-md bg-brand-ink border border-brand-line " +
+  "px-3 py-2 text-base text-brand-paper " +
+  "focus:outline-none focus:border-brand-cyan";
+
+// type="date" + type="time" instead of a single type="datetime-local":
+// every mobile browser (and desktop Chrome/Edge/Safari) renders type="date"
+// as a real tap-to-open calendar, which datetime-local doesn't reliably do -
+// Firefox desktop in particular renders it as bare spinners with no calendar
+// affordance at all. Two native inputs, still zero JS date-picker library.
+function toDateOnly(iso: string | null): string {
   if (!iso) return "";
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
-  const y = d.getFullYear();
-  const mo = pad(d.getMonth() + 1);
-  const day = pad(d.getDate());
-  const hh = pad(d.getHours());
-  const mm = pad(d.getMinutes());
-  return `${y}-${mo}-${day}T${hh}:${mm}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function toTimeOnly(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 export default function EventForm({ action, event }: Props) {
@@ -35,19 +47,42 @@ export default function EventForm({ action, event }: Props) {
       <Field label="Slug (auto if blank)" name="slug" defaultValue={event?.slug ?? ""} placeholder="unity-fest-2026" />
 
       <div className="grid sm:grid-cols-2 gap-4">
-        <Field
-          label="Starts at"
-          name="starts_at"
-          type="datetime-local"
-          defaultValue={toDatetimeLocal(event?.starts_at ?? null)}
-          required
-        />
-        <Field
-          label="Ends at (optional)"
-          name="ends_at"
-          type="datetime-local"
-          defaultValue={toDatetimeLocal(event?.ends_at ?? null)}
-        />
+        <div className="w-full">
+          <Label>Starts at</Label>
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            <input
+              type="date"
+              name="starts_date"
+              required
+              defaultValue={toDateOnly(event?.starts_at ?? null)}
+              className={dateTimeInputClass}
+            />
+            <input
+              type="time"
+              name="starts_time"
+              required
+              defaultValue={toTimeOnly(event?.starts_at ?? null)}
+              className={dateTimeInputClass}
+            />
+          </div>
+        </div>
+        <div className="w-full">
+          <Label>Ends at (optional)</Label>
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            <input
+              type="date"
+              name="ends_date"
+              defaultValue={toDateOnly(event?.ends_at ?? null)}
+              className={dateTimeInputClass}
+            />
+            <input
+              type="time"
+              name="ends_time"
+              defaultValue={toTimeOnly(event?.ends_at ?? null)}
+              className={dateTimeInputClass}
+            />
+          </div>
+        </div>
       </div>
 
       <Field
