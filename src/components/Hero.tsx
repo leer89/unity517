@@ -43,7 +43,7 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
   const days = festivalDate ? daysUntil(festivalDate) : null;
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative isolate overflow-hidden">
       {/* Plain CSS background image rather than next/image here - next/image's
           optimizer was silently failing to paint admin-uploaded photos in
           production (reported as loaded, correct dimensions, but never
