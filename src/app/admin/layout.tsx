@@ -13,6 +13,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <nav className="flex items-center gap-4 text-sm">
             <Link href="/admin/events" className="text-brand-muted hover:text-brand-paper">Events</Link>
+            <Link href="/admin/events/reorder" className="text-brand-muted hover:text-brand-paper">Reorder</Link>
             <Link href="/admin/banner" className="text-brand-muted hover:text-brand-paper">Banner</Link>
             <Link href="/admin/copy" className="text-brand-muted hover:text-brand-paper">Copy</Link>
             <Link href="/" className="text-brand-muted hover:text-brand-paper">View site →</Link>

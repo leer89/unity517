@@ -26,7 +26,10 @@ export default async function AdminEventsList() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="display text-4xl text-brand-paper">Events</h1>
-        <Link href="/admin/events/new" className="px-5 py-2 rounded-full bg-brand-neon text-brand-ink font-semibold uppercase tracking-widest text-xs shadow-glow-neon">+ New</Link>
+        <div className="flex items-center gap-3">
+          <Link href="/admin/events/reorder" className="px-5 py-2 rounded-full border border-brand-line text-brand-paper font-semibold uppercase tracking-widest text-xs hover:border-brand-cyan/60">Reorder</Link>
+          <Link href="/admin/events/new" className="px-5 py-2 rounded-full bg-brand-neon text-brand-ink font-semibold uppercase tracking-widest text-xs shadow-glow-neon">+ New</Link>
+        </div>
       </div>
 
       {events.length === 0 ? (

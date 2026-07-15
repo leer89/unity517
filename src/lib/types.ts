@@ -1,4 +1,5 @@
-// Shared types. Mirrors the Supabase schema in supabase/migrations/001_init.sql.
+// Shared types. Mirrors the Supabase schema in supabase/migrations/001_init.sql
+// and 003_event_sort_order.sql.
 
 export type Event = {
   id: string;
@@ -12,6 +13,7 @@ export type Event = {
   ticket_url: string | null;
   is_featured: boolean;
   is_archived: boolean;
+  sort_order: number;
   created_at: string;
   updated_at: string;
 };

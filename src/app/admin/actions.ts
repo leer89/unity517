@@ -77,10 +77,24 @@ async function clearOtherFeatured(supabase: SupabaseClient, keepId?: string) {
   await query;
 }
 
+// New events jump to the top of the manual display order, same spirit as
+// auto-featuring: the thing you just added is the thing you want up front.
+async function nextTopSortOrder(supabase: SupabaseClient): Promise<number> {
+  const { data } = await supabase
+    .from("events")
+    .select("sort_order")
+    .order("sort_order", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  const currentMin = (data?.sort_order as number | undefined) ?? 0;
+  return currentMin - 1;
+}
+
 function revalidatePublicPages() {
   revalidatePath("/");
   revalidatePath("/about");
   revalidatePath("/admin/events");
+  revalidatePath("/admin/events/reorder");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -107,6 +121,7 @@ export async function createEvent(formData: FormData) {
   const is_featured = formData.get("is_featured") === "on";
 
   const flyer_url = await resolveImageUrl(supabase, formData, "flyer_file", "flyer_url", null, "flyers");
+  const sort_order = await nextTopSortOrder(supabase);
 
   const { data, error } = await supabase
     .from("events")
@@ -121,6 +136,7 @@ export async function createEvent(formData: FormData) {
       ticket_url: optStr(formData, "ticket_url"),
       is_featured,
       is_archived: false,
+      sort_order,
     })
     .select("id")
     .single();
@@ -184,6 +200,36 @@ export async function deleteEvent(id: string) {
   const { supabase } = await requireAdmin();
   const { error } = await supabase.from("events").delete().eq("id", id);
   if (error) throw new Error(`Could not delete event: ${error.message}`);
+  revalidatePublicPages();
+}
+
+// Swaps sort_order with the event immediately above/below in the current
+// display order. No-op at either edge of the list. Simple integer swaps
+// (rather than drag-and-drop) so this works reliably with plain taps on
+// mobile - no gesture handling to fight with while scrolling.
+export async function moveEvent(id: string, direction: "up" | "down") {
+  const { supabase } = await requireAdmin();
+
+  const { data } = await supabase
+    .from("events")
+    .select("id, sort_order")
+    .eq("is_archived", false)
+    .order("sort_order", { ascending: true })
+    .order("starts_at", { ascending: true });
+
+  const list = (data ?? []) as { id: string; sort_order: number }[];
+  const idx = list.findIndex((e) => e.id === id);
+  if (idx === -1) return;
+
+  const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= list.length) return;
+
+  const a = list[idx];
+  const b = list[swapIdx];
+
+  await supabase.from("events").update({ sort_order: b.sort_order }).eq("id", a.id);
+  await supabase.from("events").update({ sort_order: a.sort_order }).eq("id", b.id);
+
   revalidatePublicPages();
 }
 

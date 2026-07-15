@@ -16,7 +16,7 @@ const MOCK_EVENTS: Event[] = [
     location: "216 E Grand River Ave, Old Town Lansing, MI",
     description: "All ages, free entry. Multiple stages, DJs, electronic music artists, vendors, food trucks, non-profits.",
     flyer_url: "/unity-fest.png", ticket_url: null,
-    is_featured: true, is_archived: false, created_at: TS, updated_at: TS,
+    is_featured: true, is_archived: false, sort_order: 1, created_at: TS, updated_at: TS,
   },
   {
     id: "2", title: "Unity in Music - The Avenue", slug: "unity-in-music-avenue",
@@ -24,14 +24,14 @@ const MOCK_EVENTS: Event[] = [
     location: "The Avenue Cafe, Lansing, MI",
     description: "Evolve Studios x GG present a night of underground electronic music.",
     flyer_url: "/unity-in-music.png", ticket_url: null,
-    is_featured: false, is_archived: false, created_at: TS, updated_at: TS,
+    is_featured: false, is_archived: false, sort_order: 2, created_at: TS, updated_at: TS,
   },
   {
     id: "3", title: "Late Night Sessions", slug: "late-night-sessions",
     starts_at: "2026-07-12T02:00:00.000Z", ends_at: null,
     location: "Old Town Lansing, MI", description: "Local DJs till close.",
     flyer_url: null, ticket_url: null,
-    is_featured: false, is_archived: false, created_at: TS, updated_at: TS,
+    is_featured: false, is_archived: false, sort_order: 3, created_at: TS, updated_at: TS,
   },
 ];
 
@@ -47,12 +47,15 @@ const MOCK_COPY: Record<string, string> = {
   contact: "Booking + press: bookings@unitynmusic517.com",
 };
 
+// Grid order is admin-controlled (see /admin/events/reorder) via sort_order,
+// falling back to soonest-first for events that haven't been manually placed.
 export async function getUpcomingEvents(): Promise<Event[]> {
   if (USE_MOCKS) return MOCK_EVENTS.filter((e) => !e.is_archived);
   const supabase = createClient();
   const now = new Date().toISOString();
   const { data } = await supabase.from("events").select("*").eq("is_archived", false)
-    .or(`starts_at.gte.${now},ends_at.gte.${now}`).order("starts_at", { ascending: true });
+    .or(`starts_at.gte.${now},ends_at.gte.${now}`)
+    .order("sort_order", { ascending: true }).order("starts_at", { ascending: true });
   return (data ?? []) as Event[];
 }
 
