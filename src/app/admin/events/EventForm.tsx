@@ -19,7 +19,12 @@ function toDatetimeLocal(iso: string | null): string {
 export default function EventForm({ action, event }: Props) {
   return (
     <form action={action} encType="multipart/form-data" className="space-y-5 w-full max-w-2xl">
-      <Field label="Title" name="title" defaultValue={event?.title ?? ""} required />
+      <Field
+        label={event ? "Title" : "Title (optional, derived from flyer filename if left blank)"}
+        name="title"
+        defaultValue={event?.title ?? ""}
+        required={Boolean(event)}
+      />
       <Field label="Slug (auto if blank)" name="slug" defaultValue={event?.slug ?? ""} placeholder="unity-fest-2026" />
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -73,7 +78,11 @@ export default function EventForm({ action, event }: Props) {
       </div>
 
       <div className="flex flex-wrap items-center gap-6 pt-2">
-        <Checkbox name="is_featured" defaultChecked={event?.is_featured ?? false} label="Feature on homepage (only one)" />
+        <Checkbox
+          name="is_featured"
+          defaultChecked={event ? event.is_featured : true}
+          label="Feature on homepage (only one, new events default to featured)"
+        />
         {event && (
           <Checkbox name="is_archived" defaultChecked={event?.is_archived ?? false} label="Archived (hidden from public)" />
         )}

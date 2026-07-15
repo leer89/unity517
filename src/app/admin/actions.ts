@@ -27,6 +27,18 @@ function optStr(formData: FormData, key: string): string | null {
   return v.length ? v : null;
 }
 
+// Turns "unity-fest_aug30.jpg" into "Unity Fest Aug30" - used as a fallback
+// title when the admin uploads just a flyer without typing one in.
+function titleFromFilename(filename: string): string {
+  const base = filename.replace(/\.[^./]+$/, "");
+  return base
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w))
+    .join(" ");
+}
+
 // Uploads an image file to the `media` storage bucket (if one was chosen) and
 // returns its public URL. Falls back to a plain pasted URL, then to whatever
 // URL already existed (so re-saving a form without touching the image is a
@@ -58,7 +70,7 @@ async function resolveImageUrl(
   return existingUrl;
 }
 
-// Only one event can be featured at a time (see DESIGN.md — singleton "Featured" slot).
+// Only one event can be featured at a time (see DESIGN.md - singleton "Featured" slot).
 async function clearOtherFeatured(supabase: SupabaseClient, keepId?: string) {
   let query = supabase.from("events").update({ is_featured: false }).eq("is_featured", true);
   if (keepId) query = query.neq("id", keepId);
@@ -78,8 +90,15 @@ function revalidatePublicPages() {
 export async function createEvent(formData: FormData) {
   const { supabase } = await requireAdmin();
 
-  const title = str(formData, "title");
-  if (!title) throw new Error("Title is required");
+  // A flyer-only quick-add is allowed: if the admin didn't type a title,
+  // fall back to one derived from the uploaded file's name so the event can
+  // still be created (editable later). Date is never guessed - see below.
+  const flyerFile = formData.get("flyer_file");
+  const hasFlyerFile = flyerFile instanceof File && flyerFile.size > 0;
+
+  let title = str(formData, "title");
+  if (!title && hasFlyerFile) title = titleFromFilename((flyerFile as File).name);
+  if (!title) throw new Error("Title is required (or upload a flyer to derive one from its filename)");
 
   const slug = slugify(str(formData, "slug") || title);
   const starts_at = str(formData, "starts_at");
