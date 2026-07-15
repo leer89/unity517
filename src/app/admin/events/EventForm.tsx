@@ -64,13 +64,20 @@ export default function EventForm({ action, event }: Props) {
         placeholder="https://..."
       />
 
-      <Textarea
-        label="Lineup (optional - one artist per line, any order, we alphabetize it)"
-        name="lineup"
-        rows={8}
-        defaultValue={event?.lineup ?? ""}
-        placeholder={"John Beltran\nRaedy Lex\nZak Bletz\n..."}
-      />
+      <div className="w-full">
+        <Textarea
+          label="Lineup (optional - one artist per line, any order, we alphabetize it)"
+          name="lineup"
+          rows={8}
+          defaultValue={event?.lineup ?? ""}
+          placeholder={"John Beltran\nRaedy Lex | https://open.spotify.com/artist/xxxx\nZak Bletz\n..."}
+        />
+        <p className="text-xs text-brand-muted mt-1">
+          Each name becomes a tappable button that searches Spotify for that artist.
+          If a search would point somewhere wrong, add the exact link after a pipe:{" "}
+          <code className="text-brand-paper/80">Artist Name | https://open.spotify.com/artist/...</code>
+        </p>
+      </div>
 
       <div className="w-full">
         <Label>Flyer image</Label>
