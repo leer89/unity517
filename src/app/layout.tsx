@@ -8,11 +8,11 @@ import SiteFooter from "@/components/SiteFooter";
 // so the only change needed there will be re-adding the next/font imports.
 
 export const metadata: Metadata = {
-  title: "Unity n Music 517",
-  description: "Underground music + events out of Lansing, MI. Run by Unity n Music 517.",
+  title: "Unity In Music 517",
+  description: "Underground music + events out of Lansing, MI. Run by Unity In Music 517.",
   metadataBase: new URL("https://unity.makotechs.com"),
   openGraph: {
-    title: "Unity n Music 517",
+    title: "Unity In Music 517",
     description: "Underground music + events out of Lansing, MI.",
     type: "website",
   },

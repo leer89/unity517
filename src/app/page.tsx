@@ -23,7 +23,7 @@ export default async function HomePage() {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "MusicGroup",
-    name: "Unity n Music 517",
+    name: "Unity In Music 517",
     url: "https://unity.makotechs.com",
     sameAs: ["https://www.instagram.com/unitynmusic517/"],
     location: {

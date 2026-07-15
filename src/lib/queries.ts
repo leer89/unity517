@@ -61,7 +61,7 @@ const MOCK_BANNER: Banner = {
 };
 
 const MOCK_COPY: Record<string, string> = {
-  about: "Unity n Music 517 is an underground music collective out of Lansing, MI. We throw shows that put community first - all ages, all genres, all welcome.",
+  about: "Unity In Music 517 is an underground music collective out of Lansing, MI. We throw shows that put community first - all ages, all genres, all welcome.",
   contact: "Booking + press: bookings@unitynmusic517.com",
 };
 

@@ -71,7 +71,7 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
     description: event.description ?? undefined,
     organizer: {
       "@type": "Organization",
-      name: "Unity n Music 517",
+      name: "Unity In Music 517",
       url: "https://unity.makotechs.com",
     },
     offers: event.ticket_url
