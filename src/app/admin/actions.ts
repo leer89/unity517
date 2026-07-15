@@ -70,6 +70,39 @@ async function resolveImageUrl(
   return existingUrl;
 }
 
+// Uploads any number of extra gallery images (multi-file input) and merges
+// them with whatever existing gallery images weren't checked for removal.
+// Order is: kept existing images first (their original order), then newly
+// uploaded ones appended after - so re-uploading never reshuffles slides
+// someone already has in a good order.
+async function resolveGalleryUrls(
+  supabase: SupabaseClient,
+  formData: FormData,
+  existingUrls: string[],
+): Promise<string[]> {
+  const removed = new Set(formData.getAll("remove_flyer_urls").map(String));
+  const kept = existingUrls.filter((u) => !removed.has(u));
+
+  const files = formData
+    .getAll("extra_flyer_files")
+    .filter((f): f is File => f instanceof File && f.size > 0);
+
+  const uploaded: string[] = [];
+  for (const file of files) {
+    const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
+    const path = `flyers/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("media").upload(path, file, {
+      contentType: file.type || undefined,
+      upsert: false,
+    });
+    if (error) throw new Error(`Gallery image upload failed: ${error.message}`);
+    const { data } = supabase.storage.from("media").getPublicUrl(path);
+    uploaded.push(data.publicUrl);
+  }
+
+  return [...kept, ...uploaded];
+}
+
 // Only one event can be featured at a time (see DESIGN.md - singleton "Featured" slot).
 async function clearOtherFeatured(supabase: SupabaseClient, keepId?: string) {
   let query = supabase.from("events").update({ is_featured: false }).eq("is_featured", true);
@@ -121,6 +154,7 @@ export async function createEvent(formData: FormData) {
   const is_featured = formData.get("is_featured") === "on";
 
   const flyer_url = await resolveImageUrl(supabase, formData, "flyer_file", "flyer_url", null, "flyers");
+  const flyer_urls = await resolveGalleryUrls(supabase, formData, []);
   const sort_order = await nextTopSortOrder(supabase);
 
   const { data, error } = await supabase
@@ -133,6 +167,7 @@ export async function createEvent(formData: FormData) {
       location: optStr(formData, "location"),
       description: optStr(formData, "description"),
       flyer_url,
+      flyer_urls,
       ticket_url: optStr(formData, "ticket_url"),
       lineup: optStr(formData, "lineup"),
       is_featured,
@@ -152,7 +187,11 @@ export async function createEvent(formData: FormData) {
 export async function updateEvent(id: string, formData: FormData) {
   const { supabase } = await requireAdmin();
 
-  const { data: existing } = await supabase.from("events").select("flyer_url").eq("id", id).maybeSingle();
+  const { data: existing } = await supabase
+    .from("events")
+    .select("flyer_url, flyer_urls")
+    .eq("id", id)
+    .maybeSingle();
 
   const title = str(formData, "title");
   if (!title) throw new Error("Title is required");
@@ -172,6 +211,11 @@ export async function updateEvent(id: string, formData: FormData) {
     (existing?.flyer_url as string | null) ?? null,
     "flyers",
   );
+  const flyer_urls = await resolveGalleryUrls(
+    supabase,
+    formData,
+    (existing?.flyer_urls as string[] | null) ?? [],
+  );
 
   const { error } = await supabase
     .from("events")
@@ -183,6 +227,7 @@ export async function updateEvent(id: string, formData: FormData) {
       location: optStr(formData, "location"),
       description: optStr(formData, "description"),
       flyer_url,
+      flyer_urls,
       ticket_url: optStr(formData, "ticket_url"),
       lineup: optStr(formData, "lineup"),
       is_featured,

@@ -25,7 +25,9 @@ const MOCK_EVENTS: Event[] = [
     starts_at: "2026-08-30T15:00:00.000Z", ends_at: "2026-08-31T02:00:00.000Z",
     location: "216 E Grand River Ave, Old Town Lansing, MI",
     description: "All ages, free entry. Multiple stages, DJs, electronic music artists, vendors, food trucks, non-profits.",
-    flyer_url: "/unity-fest.png", ticket_url: null, lineup: FESTIVAL_LINEUP,
+    flyer_url: "/unity-fest.png",
+    flyer_urls: ["/unity-in-music.png"], // demo: second slide in the gallery
+    ticket_url: null, lineup: FESTIVAL_LINEUP,
     is_featured: true, is_archived: false, sort_order: 1, created_at: TS, updated_at: TS,
   },
   {
@@ -33,14 +35,14 @@ const MOCK_EVENTS: Event[] = [
     starts_at: "2026-06-21T01:00:00.000Z", ends_at: "2026-06-21T06:00:00.000Z",
     location: "The Avenue Cafe, Lansing, MI",
     description: "Evolve Studios x GG present a night of underground electronic music.",
-    flyer_url: "/unity-in-music.png", ticket_url: null, lineup: null,
+    flyer_url: "/unity-in-music.png", flyer_urls: [], ticket_url: null, lineup: null,
     is_featured: false, is_archived: false, sort_order: 2, created_at: TS, updated_at: TS,
   },
   {
     id: "3", title: "Late Night Sessions", slug: "late-night-sessions",
     starts_at: "2026-07-12T02:00:00.000Z", ends_at: null,
     location: "Old Town Lansing, MI", description: "Local DJs till close.",
-    flyer_url: null, ticket_url: null, lineup: null,
+    flyer_url: null, flyer_urls: [], ticket_url: null, lineup: null,
     is_featured: false, is_archived: false, sort_order: 3, created_at: TS, updated_at: TS,
   },
 ];

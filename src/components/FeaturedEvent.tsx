@@ -9,6 +9,8 @@ type Props = {
 };
 
 export default function FeaturedEvent({ event }: Props) {
+  const hasGallery = (event.flyer_urls?.length ?? 0) > 0;
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="flex items-end justify-between mb-6">
@@ -32,6 +34,17 @@ export default function FeaturedEvent({ event }: Props) {
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-brand-neon/30 via-brand-violet/20 to-brand-cyan/20" />
+            )}
+            {hasGallery && (
+              <span
+                title={`${(event.flyer_urls?.length ?? 0) + 1} photos`}
+                className="absolute top-3 right-3 flex items-center justify-center w-7 h-7 rounded-full bg-brand-ink/70 text-brand-paper"
+              >
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="7" y="7" width="13" height="13" rx="2" />
+                  <path d="M4 15V5a2 2 0 0 1 2-2h10" />
+                </svg>
+              </span>
             )}
           </div>
           <div className="p-6 sm:p-10 flex flex-col justify-center gap-4">

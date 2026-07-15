@@ -4,6 +4,8 @@ import type { Event } from "@/lib/types";
 import { formatEventDate } from "@/lib/format";
 
 export default function EventCard({ event }: { event: Event }) {
+  const hasGallery = (event.flyer_urls?.length ?? 0) > 0;
+
   return (
     <Link
       href={`/events/${event.slug}`}
@@ -23,6 +25,17 @@ export default function EventCard({ event }: { event: Event }) {
         )}
         {event.is_featured && (
           <span className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-brand-neon text-brand-ink font-bold tracking-widest uppercase">★ Featured</span>
+        )}
+        {hasGallery && (
+          <span
+            title={`${(event.flyer_urls?.length ?? 0) + 1} photos`}
+            className="absolute top-2 right-2 flex items-center justify-center w-6 h-6 rounded-full bg-brand-ink/70 text-brand-paper"
+          >
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="7" y="7" width="13" height="13" rx="2" />
+              <path d="M4 15V5a2 2 0 0 1 2-2h10" />
+            </svg>
+          </span>
         )}
       </div>
       <div className="p-3">

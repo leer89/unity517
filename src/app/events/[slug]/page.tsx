@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getEventBySlug } from "@/lib/queries";
 import { formatEventDate } from "@/lib/format";
 import LineupList from "@/components/LineupList";
+import FlyerCarousel from "@/components/FlyerCarousel";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +43,12 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
   const event = await getEventBySlug(params.slug);
   if (!event || event.is_archived) notFound();
 
+  // Cover flyer first, then any additional gallery images, deduped -
+  // this is the full swipeable set for the page.
+  const galleryImages = [event.flyer_url, ...(event.flyer_urls ?? [])].filter(
+    (url): url is string => Boolean(url),
+  );
+
   // schema.org Event JSON-LD. Helps Google show this in event-search rich
   // results once the site is indexed.
   const jsonLd = {
@@ -60,7 +66,7 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
           address: event.location,
         }
       : undefined,
-    image: event.flyer_url ? [event.flyer_url] : undefined,
+    image: galleryImages.length ? galleryImages : undefined,
     description: event.description ?? undefined,
     organizer: {
       "@type": "Organization",
@@ -86,20 +92,7 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
       <Link href="/" className="text-sm text-brand-muted hover:text-brand-paper">← Back</Link>
 
       <div className="mt-6 grid md:grid-cols-2 gap-8">
-        <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-brand-line bg-brand-card">
-          {event.flyer_url ? (
-            <Image
-              src={event.flyer_url}
-              alt={event.title}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-              priority
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-neon/30 to-brand-cyan/20" />
-          )}
-        </div>
+        <FlyerCarousel images={galleryImages} alt={event.title} />
 
         <div>
           <span className="text-xs uppercase tracking-[0.2em] text-brand-cyan">

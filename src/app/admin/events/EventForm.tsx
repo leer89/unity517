@@ -13,10 +13,17 @@ function toDatetimeLocal(iso: string | null): string {
   if (!iso) return "";
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const y = d.getFullYear();
+  const mo = pad(d.getMonth() + 1);
+  const day = pad(d.getDate());
+  const hh = pad(d.getHours());
+  const mm = pad(d.getMinutes());
+  return `${y}-${mo}-${day}T${hh}:${mm}`;
 }
 
 export default function EventForm({ action, event }: Props) {
+  const gallery = event?.flyer_urls ?? [];
+
   return (
     <form action={action} encType="multipart/form-data" className="space-y-5 w-full max-w-2xl">
       <Field
@@ -80,8 +87,10 @@ export default function EventForm({ action, event }: Props) {
       </div>
 
       <div className="w-full">
-        <Label>Flyer image</Label>
-        <p className="text-xs text-brand-muted mt-1">Upload an image, or paste a URL below.</p>
+        <Label>Cover flyer</Label>
+        <p className="text-xs text-brand-muted mt-1">
+          Shown in the grid, the featured card, and link previews. Upload an image, or paste a URL below.
+        </p>
         <FileField label="" name="flyer_file" />
         <Field
           label=""
@@ -89,6 +98,40 @@ export default function EventForm({ action, event }: Props) {
           defaultValue={event?.flyer_url ?? ""}
           placeholder="https://...image.jpg"
           className="mt-2"
+        />
+      </div>
+
+      <div className="w-full">
+        <Label>Additional flyers</Label>
+        <p className="text-xs text-brand-muted mt-1">
+          Optional. Add more photos to turn the event page into a swipeable gallery,
+          cover flyer first. Select multiple files at once to upload them all.
+        </p>
+
+        {gallery.length > 0 && (
+          <div className="mt-3 grid grid-cols-3 sm:grid-cols-4 gap-2">
+            {gallery.map((url) => (
+              <label
+                key={url}
+                className="relative block rounded-md overflow-hidden border border-brand-line aspect-square cursor-pointer"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={url} alt="" className="w-full h-full object-cover" />
+                <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-brand-ink/80 py-1 text-[10px] uppercase tracking-widest text-brand-paper">
+                  <input type="checkbox" name="remove_flyer_urls" value={url} className="accent-brand-neon" />
+                  Remove
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+
+        <input
+          type="file"
+          name="extra_flyer_files"
+          accept="image/*"
+          multiple
+          className="mt-3 block w-full min-w-0 text-sm text-brand-paper file:mr-3 file:rounded-md file:border-0 file:bg-brand-card file:px-3 file:py-2 file:text-brand-paper hover:file:bg-brand-line"
         />
       </div>
 
