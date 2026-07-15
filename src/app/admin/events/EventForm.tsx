@@ -1,6 +1,7 @@
 import type { Event } from "@/lib/types";
 import { Field, Textarea, FileField, Checkbox, Label } from "@/components/ui/FormField";
 import { Button } from "@/components/ui/Button";
+import { isoToZonedDateParts } from "@/lib/format";
 
 type Props = {
   action: (formData: FormData) => void | Promise<void>;
@@ -14,27 +15,20 @@ const dateTimeInputClass =
   "px-3 py-2 text-base text-brand-paper " +
   "focus:outline-none focus:border-brand-cyan";
 
-// type="date" + type="time" instead of a single type="datetime-local":
-// every mobile browser (and desktop Chrome/Edge/Safari) renders type="date"
-// as a real tap-to-open calendar, which datetime-local doesn't reliably do -
-// Firefox desktop in particular renders it as bare spinners with no calendar
-// affordance at all. Two native inputs, still zero JS date-picker library.
-function toDateOnly(iso: string | null): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-}
-
-function toTimeOnly(iso: string | null): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
 export default function EventForm({ action, event }: Props) {
   const gallery = event?.flyer_urls ?? [];
+
+  // type="date" + type="time" instead of a single type="datetime-local":
+  // every mobile browser (and desktop Chrome/Edge/Safari) renders type="date"
+  // as a real tap-to-open calendar, which datetime-local doesn't reliably do -
+  // Firefox desktop in particular renders it as bare spinners with no calendar
+  // affordance at all. Two native inputs, still zero JS date-picker library.
+  //
+  // Values come from isoToZonedDateParts (America/Detroit) rather than the
+  // server's own local time (UTC on Vercel) - otherwise the edit form shows
+  // a different time than the public site for the same event.
+  const starts = isoToZonedDateParts(event?.starts_at ?? null);
+  const ends = isoToZonedDateParts(event?.ends_at ?? null);
 
   return (
     <form action={action} encType="multipart/form-data" className="space-y-5 w-full max-w-2xl">
@@ -54,14 +48,14 @@ export default function EventForm({ action, event }: Props) {
               type="date"
               name="starts_date"
               required
-              defaultValue={toDateOnly(event?.starts_at ?? null)}
+              defaultValue={starts.date}
               className={dateTimeInputClass}
             />
             <input
               type="time"
               name="starts_time"
               required
-              defaultValue={toTimeOnly(event?.starts_at ?? null)}
+              defaultValue={starts.time}
               className={dateTimeInputClass}
             />
           </div>
@@ -72,13 +66,13 @@ export default function EventForm({ action, event }: Props) {
             <input
               type="date"
               name="ends_date"
-              defaultValue={toDateOnly(event?.ends_at ?? null)}
+              defaultValue={ends.date}
               className={dateTimeInputClass}
             />
             <input
               type="time"
               name="ends_time"
-              defaultValue={toTimeOnly(event?.ends_at ?? null)}
+              defaultValue={ends.time}
               className={dateTimeInputClass}
             />
           </div>
