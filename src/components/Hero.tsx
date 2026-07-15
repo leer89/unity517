@@ -45,7 +45,12 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
 
   return (
     <section className="relative overflow-hidden">
-      {/* Background flyer at low opacity, full-bleed, with a heavy gradient over it. */}
+      {/* Full-strength background photo - the admin's uploaded banner image
+          reads as an actual photo now, not a washed-out watermark. Legibility
+          comes from a directional gradient instead of dimming the whole
+          image: dark where the headline sits (left, and on mobile where text
+          spans full width), clear where there's nothing to read over. A
+          short fade at the very bottom blends into the page below it. */}
       <div className="absolute inset-0 -z-10">
         <Image
           src={image}
@@ -53,9 +58,10 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-40"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-ink/40 via-brand-ink/70 to-brand-ink" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-ink via-brand-ink/75 to-brand-ink/10 sm:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-ink via-brand-ink/10 to-transparent" />
       </div>
 
       <div className="mx-auto max-w-7xl px-4 pt-20 pb-24 sm:pt-28 sm:pb-32">
