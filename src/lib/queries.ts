@@ -19,6 +19,12 @@ const FESTIVAL_LINEUP = [
   "The Don", "Mr Twista", "Katalist", "Brent Scudder",
 ].join("\n");
 
+const FESTIVAL_LINKS = [
+  "Official Anthem | https://open.spotify.com/track/xxxxxxxxxxxx",
+  "https://www.tiktok.com/@unitynmusic517",
+  "https://www.instagram.com/unitynmusic517/",
+].join("\n");
+
 const MOCK_EVENTS: Event[] = [
   {
     id: "1", title: "Unity in Music Festival", slug: "unity-fest-2026",
@@ -27,7 +33,7 @@ const MOCK_EVENTS: Event[] = [
     description: "All ages, free entry. Multiple stages, DJs, electronic music artists, vendors, food trucks, non-profits.",
     flyer_url: "/unity-fest.png",
     flyer_urls: ["/unity-in-music.png"], // demo: second slide in the gallery
-    ticket_url: null, lineup: FESTIVAL_LINEUP,
+    ticket_url: null, lineup: FESTIVAL_LINEUP, links: FESTIVAL_LINKS,
     is_featured: true, is_archived: false, sort_order: 1, created_at: TS, updated_at: TS,
   },
   {
@@ -35,14 +41,14 @@ const MOCK_EVENTS: Event[] = [
     starts_at: "2026-06-21T01:00:00.000Z", ends_at: "2026-06-21T06:00:00.000Z",
     location: "The Avenue Cafe, Lansing, MI",
     description: "Evolve Studios x GG present a night of underground electronic music.",
-    flyer_url: "/unity-in-music.png", flyer_urls: [], ticket_url: null, lineup: null,
+    flyer_url: "/unity-in-music.png", flyer_urls: [], ticket_url: null, lineup: null, links: null,
     is_featured: false, is_archived: false, sort_order: 2, created_at: TS, updated_at: TS,
   },
   {
     id: "3", title: "Late Night Sessions", slug: "late-night-sessions",
     starts_at: "2026-07-12T02:00:00.000Z", ends_at: null,
     location: "Old Town Lansing, MI", description: "Local DJs till close.",
-    flyer_url: null, flyer_urls: [], ticket_url: null, lineup: null,
+    flyer_url: null, flyer_urls: [], ticket_url: null, lineup: null, links: null,
     is_featured: false, is_archived: false, sort_order: 3, created_at: TS, updated_at: TS,
   },
 ];
@@ -65,9 +71,10 @@ export async function getUpcomingEvents(): Promise<Event[]> {
   if (USE_MOCKS) return MOCK_EVENTS.filter((e) => !e.is_archived);
   const supabase = createClient();
   const now = new Date().toISOString();
-  const { data } = await supabase.from("events").select("*").eq("is_archived", false)
+  const { data, error } = await supabase.from("events").select("*").eq("is_archived", false)
     .or(`starts_at.gte.${now},ends_at.gte.${now}`)
     .order("sort_order", { ascending: true }).order("starts_at", { ascending: true });
+  if (error) console.error("getUpcomingEvents:", error.message);
   return (data ?? []) as Event[];
 }
 
@@ -75,36 +82,41 @@ export async function getFeaturedEvent(): Promise<Event | null> {
   if (USE_MOCKS) return MOCK_EVENTS.find((e) => e.is_featured) ?? null;
   const supabase = createClient();
   const now = new Date().toISOString();
-  const { data } = await supabase.from("events").select("*").eq("is_featured", true)
+  const { data, error } = await supabase.from("events").select("*").eq("is_featured", true)
     .eq("is_archived", false).or(`starts_at.gte.${now},ends_at.gte.${now}`)
     .order("starts_at", { ascending: true }).limit(1).maybeSingle();
+  if (error) console.error("getFeaturedEvent:", error.message);
   return (data ?? null) as Event | null;
 }
 
 export async function getEventBySlug(slug: string): Promise<Event | null> {
   if (USE_MOCKS) return MOCK_EVENTS.find((e) => e.slug === slug) ?? null;
   const supabase = createClient();
-  const { data } = await supabase.from("events").select("*").eq("slug", slug).maybeSingle();
+  const { data, error } = await supabase.from("events").select("*").eq("slug", slug).maybeSingle();
+  if (error) console.error("getEventBySlug:", error.message);
   return (data ?? null) as Event | null;
 }
 
 export async function getBanner(): Promise<Banner | null> {
   if (USE_MOCKS) return MOCK_BANNER;
   const supabase = createClient();
-  const { data } = await supabase.from("banner").select("*").eq("id", 1).maybeSingle();
+  const { data, error } = await supabase.from("banner").select("*").eq("id", 1).maybeSingle();
+  if (error) console.error("getBanner:", error.message);
   return (data ?? null) as Banner | null;
 }
 
 export async function getSiteCopy(key: string): Promise<string | null> {
   if (USE_MOCKS) return MOCK_COPY[key] ?? null;
   const supabase = createClient();
-  const { data } = await supabase.from("site_copy").select("value").eq("key", key).maybeSingle();
+  const { data, error } = await supabase.from("site_copy").select("value").eq("key", key).maybeSingle();
+  if (error) console.error("getSiteCopy:", error.message);
   return (data?.value as string) ?? null;
 }
 
 export async function getAllSiteCopy(): Promise<SiteCopy[]> {
   if (USE_MOCKS) return Object.entries(MOCK_COPY).map(([key, value]) => ({ key, value, updated_at: TS }));
   const supabase = createClient();
-  const { data } = await supabase.from("site_copy").select("*").order("key");
+  const { data, error } = await supabase.from("site_copy").select("*").order("key");
+  if (error) console.error("getAllSiteCopy:", error.message);
   return (data ?? []) as SiteCopy[];
 }

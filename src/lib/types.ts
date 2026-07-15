@@ -1,5 +1,5 @@
 // Shared types. Mirrors the Supabase schema in supabase/migrations/001_init.sql,
-// 003_event_sort_order.sql, 004_event_lineup.sql, and 005_event_flyer_gallery.sql.
+// 003_event_sort_order.sql, 004_event_lineup.sql, 005_event_flyer_gallery.sql, and 006_event_links.sql.
 
 export type Event = {
   id: string;
@@ -13,6 +13,7 @@ export type Event = {
   flyer_urls: string[]; // additional gallery images beyond the cover (flyer_url)
   ticket_url: string | null;
   lineup: string | null; // newline-separated artist names, optional
+  links: string | null; // newline-separated social/song links, optional
   is_featured: boolean;
   is_archived: boolean;
   sort_order: number;

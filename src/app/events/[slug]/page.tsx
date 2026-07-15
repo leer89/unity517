@@ -5,6 +5,7 @@ import { getEventBySlug } from "@/lib/queries";
 import { formatEventDate } from "@/lib/format";
 import LineupList from "@/components/LineupList";
 import FlyerCarousel from "@/components/FlyerCarousel";
+import EventLinks from "@/components/EventLinks";
 
 export const dynamic = "force-dynamic";
 
@@ -115,6 +116,7 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
               Get tickets →
             </a>
           )}
+          {event.links && <EventLinks links={event.links} />}
         </div>
       </div>
 

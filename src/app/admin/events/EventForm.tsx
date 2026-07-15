@@ -122,6 +122,21 @@ export default function EventForm({ action, event }: Props) {
       </div>
 
       <div className="w-full">
+        <Textarea
+          label="Links (optional - official song, TikTok, event-specific social, etc.)"
+          name="links"
+          rows={4}
+          defaultValue={event?.links ?? ""}
+          placeholder={"Official Anthem | https://open.spotify.com/track/xxxx\nhttps://www.tiktok.com/@unitynmusic517\nhttps://www.instagram.com/unitynmusic517/"}
+        />
+        <p className="text-xs text-brand-muted mt-1">
+          One per line. We detect Spotify, TikTok, Instagram, YouTube, SoundCloud, X, and Facebook
+          automatically and show the matching icon. Add a custom label with a pipe:{" "}
+          <code className="text-brand-paper/80">Official Anthem | https://open.spotify.com/track/...</code>
+        </p>
+      </div>
+
+      <div className="w-full">
         <Label>Cover flyer</Label>
         <p className="text-xs text-brand-muted mt-1">
           Shown in the grid, the featured card, and link previews. Upload an image, or paste a URL below.

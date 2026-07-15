@@ -178,6 +178,7 @@ export async function createEvent(formData: FormData) {
       flyer_urls,
       ticket_url: optStr(formData, "ticket_url"),
       lineup: optStr(formData, "lineup"),
+      links: optStr(formData, "links"),
       is_featured,
       is_archived: false,
       sort_order,
@@ -238,6 +239,7 @@ export async function updateEvent(id: string, formData: FormData) {
       flyer_urls,
       ticket_url: optStr(formData, "ticket_url"),
       lineup: optStr(formData, "lineup"),
+      links: optStr(formData, "links"),
       is_featured,
       is_archived,
     })

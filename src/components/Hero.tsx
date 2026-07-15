@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Banner } from "@/lib/types";
 import { daysUntil } from "@/lib/format";
+import LineupPills from "@/components/LineupPills";
 
 type HeroProps = {
   banner: Banner | null;
@@ -11,6 +12,9 @@ type HeroProps = {
   // Slug of the currently-featured event. Used so the CTA can point at its
   // real page (where the lineup now lives) instead of a same-page anchor.
   festivalSlug?: string | null;
+  // Featured event's lineup, if it has one. Shown right here in the banner
+  // so people see it without having to click through first.
+  lineup?: string | null;
 };
 
 const DEFAULTS = {
@@ -21,7 +25,7 @@ const DEFAULTS = {
   cta_url: "#events",
 };
 
-export default function Hero({ banner, festivalDate, festivalSlug }: HeroProps) {
+export default function Hero({ banner, festivalDate, festivalSlug, lineup }: HeroProps) {
   const image = banner?.image_url ?? DEFAULTS.image_url;
   const headline = banner?.headline ?? DEFAULTS.headline;
   const subheadline = banner?.subheadline ?? DEFAULTS.subheadline;
@@ -86,6 +90,18 @@ export default function Hero({ banner, festivalDate, festivalSlug }: HeroProps) 
             </div>
           )}
         </div>
+
+        {/* Lineup preview, right in the banner - same bubbles as the event
+            page, smaller size to fit the hero. Full list, not a teaser: the
+            whole point of alphabetical/equal-weight is nobody gets buried. */}
+        {lineup && (
+          <div className="mt-10 pt-8 border-t border-brand-paper/10">
+            <span className="block text-[11px] uppercase tracking-[0.25em] text-brand-cyan mb-3">
+              Lineup
+            </span>
+            <LineupPills lineup={lineup} size="sm" />
+          </div>
+        )}
       </div>
     </section>
   );
