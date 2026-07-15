@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { Banner } from "@/lib/types";
 import { daysUntil } from "@/lib/format";
 import LineupPills from "@/components/LineupPills";
@@ -45,20 +44,19 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
 
   return (
     <section className="relative overflow-hidden">
-      {/* Full-strength background photo - the admin's uploaded banner image
-          reads as an actual photo now, not a washed-out watermark. Legibility
-          comes from a directional gradient instead of dimming the whole
-          image: dark where the headline sits (left, and on mobile where text
-          spans full width), clear where there's nothing to read over. A
-          short fade at the very bottom blends into the page below it. */}
+      {/* Plain CSS background image rather than next/image here - next/image's
+          optimizer was silently failing to paint admin-uploaded photos in
+          production (reported as loaded, correct dimensions, but never
+          rendered - confirmed via direct pixel testing). A CSS background
+          sidesteps that pipeline entirely and is proven to work reliably.
+          Legibility comes from a directional gradient instead of dimming the
+          whole image: dark where the headline sits (left, and on mobile
+          where text spans full width), clear where there's nothing to read
+          over. A short fade at the very bottom blends into the page below. */}
       <div className="absolute inset-0 -z-10">
-        <Image
-          src={image}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${image})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-ink via-brand-ink/75 to-brand-ink/10 sm:to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-ink via-brand-ink/10 to-transparent" />
