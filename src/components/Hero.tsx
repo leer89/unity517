@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Banner } from "@/lib/types";
 import { daysUntil } from "@/lib/format";
 import LineupPills from "@/components/LineupPills";
+import EventLinks from "@/components/EventLinks";
 
 type HeroProps = {
   banner: Banner | null;
@@ -15,6 +16,9 @@ type HeroProps = {
   // Featured event's lineup, if it has one. Shown right here in the banner
   // so people see it without having to click through first.
   lineup?: string | null;
+  // Featured event's links (official song, TikTok, etc). Same idea - shown
+  // right in the banner, not just on the event's own page.
+  links?: string | null;
 };
 
 const DEFAULTS = {
@@ -25,7 +29,7 @@ const DEFAULTS = {
   cta_url: "#events",
 };
 
-export default function Hero({ banner, festivalDate, festivalSlug, lineup }: HeroProps) {
+export default function Hero({ banner, festivalDate, festivalSlug, lineup, links }: HeroProps) {
   const image = banner?.image_url ?? DEFAULTS.image_url;
   const headline = banner?.headline ?? DEFAULTS.headline;
   const subheadline = banner?.subheadline ?? DEFAULTS.subheadline;
@@ -74,6 +78,10 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup }: Her
                 {ctaLabel} →
               </a>
             )}
+
+            {/* Links live right under the CTA, in the primary hero viewport -
+                the most prominent spot on the page, not scrolled past. */}
+            {links && <EventLinks links={links} />}
           </div>
 
           {/* Countdown: the thing that lets weekly Tuesday/Thursday flyers keep

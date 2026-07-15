@@ -44,6 +44,7 @@ export default async function HomePage() {
         festivalDate={featured?.starts_at ?? null}
         festivalSlug={featured?.slug ?? null}
         lineup={featured?.lineup ?? null}
+        links={featured?.links ?? null}
       />
       {featured && <FeaturedEvent event={featured} />}
       <EventGrid events={nonFeaturedUpcoming} />
