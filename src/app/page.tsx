@@ -39,7 +39,11 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
       />
-      <Hero banner={banner} festivalDate={featured?.starts_at ?? null} />
+      <Hero
+        banner={banner}
+        festivalDate={featured?.starts_at ?? null}
+        festivalSlug={featured?.slug ?? null}
+      />
       {featured && <FeaturedEvent event={featured} />}
       <EventGrid events={nonFeaturedUpcoming} />
     </main>

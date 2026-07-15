@@ -8,6 +8,9 @@ type HeroProps = {
   // countdown badge - the one number on this page that answers "why does
   // this site look like it's all about a festival that's months away."
   festivalDate?: string | null;
+  // Slug of the currently-featured event. Used so the CTA can point at its
+  // real page (where the lineup now lives) instead of a same-page anchor.
+  festivalSlug?: string | null;
 };
 
 const DEFAULTS = {
@@ -18,12 +21,17 @@ const DEFAULTS = {
   cta_url: "#events",
 };
 
-export default function Hero({ banner, festivalDate }: HeroProps) {
+export default function Hero({ banner, festivalDate, festivalSlug }: HeroProps) {
   const image = banner?.image_url ?? DEFAULTS.image_url;
   const headline = banner?.headline ?? DEFAULTS.headline;
   const subheadline = banner?.subheadline ?? DEFAULTS.subheadline;
   const ctaLabel = banner?.cta_label ?? DEFAULTS.cta_label;
-  const ctaUrl = banner?.cta_url ?? DEFAULTS.cta_url;
+
+  // An anchor link (or the unedited default) doesn't actually go anywhere
+  // useful once the lineup lives on the event's own page - send it there
+  // instead. Admins can still override with a real URL/path from /admin/banner.
+  const rawCtaUrl = banner?.cta_url ?? DEFAULTS.cta_url;
+  const ctaUrl = rawCtaUrl.startsWith("#") && festivalSlug ? `/events/${festivalSlug}` : rawCtaUrl;
 
   const days = festivalDate ? daysUntil(festivalDate) : null;
 
