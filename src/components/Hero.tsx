@@ -48,7 +48,7 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
   // color turns it into a quick-scan row instead of one long faint line,
   // while still degrading gracefully if an admin types something with no
   // dots in it at all (renders as a single plain segment, just bigger).
-  const subheadlineParts = subheadline.split("\u00b7").map((s) => s.trim()).filter(Boolean);
+  const subheadlineParts = subheadline.split("·").map((s) => s.trim()).filter(Boolean);
 
   return (
     <section className="relative isolate overflow-hidden">
@@ -82,7 +82,7 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
             <p className="text-lg sm:text-2xl font-medium text-brand-paper max-w-xl leading-snug">
               {subheadlineParts.map((part, i) => (
                 <span key={i}>
-                  {i > 0 && <span className="mx-2 text-brand-cyan">\u00b7</span>}
+                  {i > 0 && <span className="mx-2 text-brand-cyan">·</span>}
                   {part}
                 </span>
               ))}
