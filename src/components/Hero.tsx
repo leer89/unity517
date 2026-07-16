@@ -42,6 +42,14 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
 
   const days = festivalDate ? daysUntil(festivalDate) : null;
 
+  // The subheadline is logistics, not prose - date, place, age policy, cost.
+  // Four separate facts someone scans for, not a sentence to read start to
+  // finish. Splitting on the middle dot and giving each dot its own accent
+  // color turns it into a quick-scan row instead of one long faint line,
+  // while still degrading gracefully if an admin types something with no
+  // dots in it at all (renders as a single plain segment, just bigger).
+  const subheadlineParts = subheadline.split("\u00b7").map((s) => s.trim()).filter(Boolean);
+
   return (
     <section className="relative isolate overflow-hidden">
       {/* Plain CSS background image rather than next/image here - next/image's
@@ -71,8 +79,13 @@ export default function Hero({ banner, festivalDate, festivalSlug, lineup, links
             <h1 className="display text-5xl sm:text-7xl lg:text-8xl text-brand-paper neon-pink">
               {headline}
             </h1>
-            <p className="text-base sm:text-lg text-brand-paper/90 max-w-xl">
-              {subheadline}
+            <p className="text-lg sm:text-2xl font-medium text-brand-paper max-w-xl leading-snug">
+              {subheadlineParts.map((part, i) => (
+                <span key={i}>
+                  {i > 0 && <span className="mx-2 text-brand-cyan">\u00b7</span>}
+                  {part}
+                </span>
+              ))}
             </p>
             {ctaUrl && ctaLabel && (
               <a
