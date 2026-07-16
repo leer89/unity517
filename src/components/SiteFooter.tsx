@@ -18,6 +18,27 @@ export default function SiteFooter() {
               Admin reaches /admin by typing it directly. */}
         </div>
       </div>
+
+      {/* Credit line, phrased as a value statement first and a credit second -
+          PLUR reads as the site's own voice, "site by Makotechs" rides along
+          as quiet text with no logo asset, no badge, no separate visual
+          weight. Same dot-separator treatment as the hero subheadline, so it
+          reads as one more piece of this site rather than an injected ad. */}
+      <div className="border-t border-brand-line/60">
+        <div className="mx-auto max-w-7xl px-4 py-4 text-[11px] uppercase tracking-[0.2em] text-brand-muted/70 text-center sm:text-left">
+          Peace <span className="text-brand-cyan">·</span> Love <span className="text-brand-cyan">·</span> Unity <span className="text-brand-cyan">·</span> Respect
+          <span className="mx-2 text-brand-line">—</span>
+          site by{" "}
+          <a
+            href="https://makotechs.com"
+            target="_blank"
+            rel="noreferrer"
+            className="normal-case tracking-normal hover:text-brand-cyan transition"
+          >
+            Makotechs
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }
