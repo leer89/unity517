@@ -1,14 +1,22 @@
 export type Artist = {
   name: string;
-  url: string; // curated link if given, otherwise a Spotify search fallback
+  url: string; // curated link if given, otherwise a Google "name spotify" search fallback
   curated: boolean;
 };
 
 // Each line is "Artist Name" or "Artist Name | https://exact-link".
 // No pipe → we don't know their exact page, so the pill falls back to a
-// Spotify search for the name (better than a dead button, worse than the
-// real thing). Pipe with a URL → that exact link is used instead, so a
-// wrong search result can always be overridden by pasting the real link.
+// Google search for "<name> spotify" (better than a dead button, worse than
+// the real thing). This goes through Google rather than a direct
+// open.spotify.com search link on purpose: when the Spotify app is
+// installed, the OS hands any open.spotify.com link straight to the app,
+// but the app doesn't reliably honor a free-text search query from a link -
+// it just opens to the Search tab's "recent" screen, dropping the query
+// entirely. Google isn't intercepted by the app, so the search actually
+// runs; tapping the Spotify result from there is a real artist-page link,
+// which the app does deep-link correctly. Pipe with a URL → that exact link
+// is used instead, so a wrong search result can always be overridden by
+// pasting the real link.
 export function parseLineup(raw: string): Artist[] {
   return raw
     .split("\n")
@@ -20,7 +28,7 @@ export function parseLineup(raw: string): Artist[] {
       const curatedUrl = urlPart && /^https?:\/\//i.test(urlPart) ? urlPart : null;
       return {
         name,
-        url: curatedUrl ?? `https://open.spotify.com/search/${encodeURIComponent(name)}`,
+        url: curatedUrl ?? `https://www.google.com/search?q=${encodeURIComponent(`${name} spotify`)}`,
         curated: Boolean(curatedUrl),
       };
     })
@@ -58,7 +66,7 @@ export default function LineupPills({ lineup, size = "md" }: Props) {
               `inline-flex items-center rounded-full border border-brand-line bg-brand-card ${sizeClass} font-medium uppercase tracking-wide text-brand-paper/90 hover:border-brand-cyan/60 hover:text-brand-cyan hover:-translate-y-px transition` +
               (artist.curated ? "" : " decoration-dotted underline decoration-brand-muted/50 underline-offset-4")
             }
-            title={artist.curated ? artist.name : `${artist.name} (Spotify search)`}
+            title={artist.curated ? artist.name : `${artist.name} (search)`}
           >
             {artist.name}
           </a>
