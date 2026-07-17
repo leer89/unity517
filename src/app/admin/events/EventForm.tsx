@@ -106,12 +106,15 @@ export default function EventForm({ action, event }: Props) {
           name="lineup"
           rows={8}
           defaultValue={event?.lineup ?? ""}
-          placeholder={"John Beltran\nRaedy Lex | https://open.spotify.com/artist/xxxx\nZak Bletz\n..."}
+          placeholder={"John Beltran\n*INZO | https://open.spotify.com/artist/xxxx\nZach Bletz\n..."}
         />
         <p className="text-xs text-brand-muted mt-1">
-          Each name becomes a tappable button that searches Spotify for that artist.
+          Each name becomes a tappable button that searches for that artist.
           If a search would point somewhere wrong, add the exact link after a pipe:{" "}
           <code className="text-brand-paper/80">Artist Name | https://open.spotify.com/artist/...</code>
+          {" "}Put a <code className="text-brand-paper/80">*</code> in front of a name to show it
+          as a headliner (bigger, its own row above the rest) - e.g.{" "}
+          <code className="text-brand-paper/80">*INZO</code>.
         </p>
       </div>
 
