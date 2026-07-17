@@ -114,7 +114,10 @@ export default function EventForm({ action, event }: Props) {
           <code className="text-brand-paper/80">Artist Name | https://open.spotify.com/artist/...</code>
           {" "}Put a <code className="text-brand-paper/80">*</code> in front of a name to show it
           as a headliner (bigger, its own row above the rest) - e.g.{" "}
-          <code className="text-brand-paper/80">*INZO</code>.
+          <code className="text-brand-paper/80">*INZO</code>. For a back-to-back set, write{" "}
+          <code className="text-brand-paper/80">Name A b2b Name B</code> - they'll show as one
+          bubble but each name still gets its own link. Add both links in the same order if you
+          have them: <code className="text-brand-paper/80">Name A b2b Name B | link for A | link for B</code>.
         </p>
       </div>
 
