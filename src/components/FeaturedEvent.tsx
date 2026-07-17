@@ -14,7 +14,7 @@ export default function FeaturedEvent({ event }: Props) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="flex items-end justify-between mb-6">
-        <h2 className="display text-2xl sm:text-3xl text-brand-paper neon-cyan">Headlining</h2>
+        <h2 className="display text-2xl sm:text-3xl text-brand-paper neon-cyan">Spotlight</h2>
         <span className="text-xs uppercase tracking-[0.2em] text-brand-muted">The big one</span>
       </div>
 
